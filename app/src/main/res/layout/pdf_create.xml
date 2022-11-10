@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/create_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/design_default_color_primary"
+        android:elevation="4dp"
+        app:title="Create document page"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/topic1"
+                android:layout_width="217dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="23dp"
+                android:layout_marginEnd="193dp"
+                android:layout_marginBottom="5dp"
+                android:text="Upload your document"
+                android:textSize="20sp" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/searchButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:text="Import File"
+                    android:onClick="importDocument"
+                    android:textSize="13dp"/>
+
+
+                <TextView
+                    android:id="@+id/import_file_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:text=""
+                    android:textSize="14dp"/>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/topic2"
+                android:layout_width="203dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="203dp"
+                android:layout_marginBottom="2dp"
+                android:text="Your document name"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/document_name_prompt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="14dp"
+                android:layout_marginEnd="12dp"
+                android:ems="10"
+                android:hint="Input document name"
+                android:inputType="textPersonName"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/error_document_name"
+                android:layout_width="230dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="179dp"
+                android:layout_marginBottom="6dp"
+                android:text=""
+                android:textColor="#ff0000"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/topic3"
+                android:layout_width="230dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="179dp"
+                android:layout_marginBottom="2dp"
+                android:text="Description (100 letters)"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/description_prompt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="14dp"
+                android:layout_marginEnd="12dp"
+                android:ems="10"
+                android:gravity="start|top"
+                android:hint="Input document description"
+                android:inputType="textMultiLine"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/error_description"
+                android:layout_width="230dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="179dp"
+                android:layout_marginBottom="6dp"
+                android:text=""
+                android:textColor="#ff0000"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/topic4"
+                android:layout_width="230dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="179dp"
+                android:layout_marginBottom="2dp"
+                android:text="Price"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/price_prompt"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="14dp"
+                android:layout_marginEnd="12dp"
+                android:ems="10"
+                android:gravity="start|top"
+                android:hint="Input price"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/error_price"
+                android:layout_width="230dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="179dp"
+                android:layout_marginBottom="6dp"
+                android:text=""
+                android:textColor="#ff0000"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/topic5"
+                android:layout_width="230dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="179dp"
+                android:layout_marginBottom="5dp"
+                android:text="Upload document image"
+                android:textSize="20sp" />
+
+            <ImageView
+                android:id="@+id/doc_image"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="18dp"
+                android:onClick="importDocumentImage"
+                android:src="@drawable/pdflogo" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <Button
+                    android:id="@+id/completeButton"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:onClick="submit"
+                    android:text="Submit" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+
+</LinearLayout>
