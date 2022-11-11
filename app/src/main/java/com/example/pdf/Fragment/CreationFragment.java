@@ -3,6 +3,7 @@ package com.example.pdf.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,6 +41,8 @@ public class CreationFragment extends Fragment {
     private User user;
     //private DataBox dataBox;
 
+    private int countPage;
+
     private DatabaseReference databaseReference;
     private List<Document> documents;
     private List<DataBox> dataBoxes;
@@ -64,6 +67,9 @@ public class CreationFragment extends Fragment {
                 startActivity(intent);
             }
         });
+
+        countPage += 1;
+
         return view;
     }
 
@@ -72,13 +78,15 @@ public class CreationFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(context, 3));
 
-        documents = new ArrayList<>();
-        dataBoxes = new ArrayList<>();
+        //documents = new ArrayList<>();
+        //dataBoxes = new ArrayList<>();
 
         databaseReference = FirebaseDatabase.getInstance().getReference(String.format("%s/create", user.getUserName()));
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                documents = new ArrayList<>();
+                dataBoxes = new ArrayList<>();
                 for (DataSnapshot ds: snapshot.getChildren()){
                     Document doc = ds.getValue(com.example.pdf.model.Document.class);
 

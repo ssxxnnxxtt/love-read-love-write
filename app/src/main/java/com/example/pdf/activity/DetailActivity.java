@@ -13,6 +13,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -91,10 +94,37 @@ public class DetailActivity extends AppCompatActivity {
 
     public void buy(View view){
         if (currCoin < document.getDocumentPrice()){
+            AlertDialog.Builder notEnoughDialog = new AlertDialog.Builder(this);
+            notEnoughDialog.setCancelable(false);
+            notEnoughDialog.setTitle("Coin not enough");
+            notEnoughDialog.setMessage("Your coin hasn't enough for buy this work." );
 
+            notEnoughDialog.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+
+            final AlertDialog notEnoughAlert = notEnoughDialog.create();
+            notEnoughAlert.show();
+
+            return;
         }
 
-        double r = currCoin - document.getDocumentPrice();
-        Log.i("1", "This is: "+ r);
+        ProgressDialog progressDialog = new ProgressDialog(this);
+
+        progressDialog.setTitle("Buying work processing");
+        progressDialog.setMessage("Please wait...");
+        progressDialog.show();
+
+        double remaining = currCoin - document.getDocumentPrice();
+        coinReference.setValue(remaining);
+
+        DatabaseReference collectionReference = FirebaseDatabase.getInstance().getReference(String.format("%s/collection", buyUser.getUserName()));
+        collectionReference.child(collectionReference.push().getKey()).setValue(document);
+
+        progressDialog.dismiss();
+
     }
 }
