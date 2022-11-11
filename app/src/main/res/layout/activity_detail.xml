@@ -118,10 +118,11 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:onClick="buy"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_gravity="center|bottom"
-        android:text="Buy this book"
+        android:text="Buy this work"
         android:textSize="16sp"/>
 
 </LinearLayout>

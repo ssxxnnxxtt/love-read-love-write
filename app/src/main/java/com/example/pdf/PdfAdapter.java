@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.pdf.model.DataBox;
 import com.example.pdf.model.Document;
 import com.squareup.picasso.Picasso;
 
@@ -23,10 +24,12 @@ import java.util.List;
 public class PdfAdapter extends RecyclerView.Adapter<PdfViewHolder> {
     private Context context;
     private List<Document> documents;
+    private List<DataBox> dataBoxes;
 
     private OnPdfFileSelectListener listener;
 
-    public PdfAdapter(Context context, List<Document> documents, OnPdfFileSelectListener listener) {
+    public PdfAdapter(Context context, List<DataBox> dataBoxes,  List<Document> documents, OnPdfFileSelectListener listener) {
+        this.dataBoxes = dataBoxes;
         this.context = context;
         this.documents = documents;
         this.listener = listener;
@@ -57,7 +60,7 @@ public class PdfAdapter extends RecyclerView.Adapter<PdfViewHolder> {
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                listener.onPdfSelected(documents.get(pos));
+                listener.onPdfSelected(dataBoxes.get(pos));
             }
         });
     }

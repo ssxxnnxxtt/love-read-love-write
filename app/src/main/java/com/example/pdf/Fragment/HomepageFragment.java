@@ -3,7 +3,6 @@ package com.example.pdf.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +17,7 @@ import com.example.pdf.OnPdfFileSelectListener;
 import com.example.pdf.PdfAdapter;
 import com.example.pdf.R;
 import com.example.pdf.activity.DetailActivity;
-import com.example.pdf.activity.ReadPdfActivity;
+import com.example.pdf.model.DataBox;
 import com.example.pdf.model.Document;
 import com.example.pdf.model.User;
 import com.google.firebase.database.DataSnapshot;
@@ -38,6 +37,7 @@ public class HomepageFragment extends Fragment {
     private RecyclerView recyclerView;
     private User user;
 
+    private List<DataBox> dataBoxes;
 
     @Nullable
     @Override
@@ -58,6 +58,7 @@ public class HomepageFragment extends Fragment {
         recyclerView.setLayoutManager(new GridLayoutManager(context, 3));
 
         documents = new ArrayList<>();
+        dataBoxes = new ArrayList<>();
 
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
         databaseReference.addValueEventListener(new ValueEventListener() {
@@ -68,6 +69,11 @@ public class HomepageFragment extends Fragment {
                         if (ds.child("create").exists()) {
                             for (DataSnapshot createDs: ds.child("create").getChildren()) {
                                 Document doc = createDs.getValue(com.example.pdf.model.Document.class);
+
+                                DataBox dataBox = new DataBox();
+                                dataBox.setUser(user);
+                                dataBox.setDocument(doc);
+                                dataBoxes.add(dataBox);
                                 documents.add(doc);
                             }
                         }
@@ -76,13 +82,13 @@ public class HomepageFragment extends Fragment {
 
                 OnPdfFileSelectListener onDetail = new OnPdfFileSelectListener() {
                     @Override
-                    public void onPdfSelected(Document document) {
+                    public void onPdfSelected(DataBox dataBox) {
                         startActivity(new Intent(context, DetailActivity.class)
-                                .putExtra("docObj", document));
+                                .putExtra("dataBox", dataBox));
                     }
                 };
 
-                pdfAdapter = new PdfAdapter(context, documents, onDetail);
+                pdfAdapter = new PdfAdapter(context, dataBoxes, documents, onDetail);
                 recyclerView.setAdapter(pdfAdapter);
             }
 

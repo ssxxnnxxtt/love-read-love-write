@@ -2,7 +2,6 @@ package com.example.pdf.Fragment;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +18,7 @@ import com.example.pdf.OnPdfFileSelectListener;
 import com.example.pdf.PdfAdapter;
 import com.example.pdf.activity.ReadPdfActivity;
 import com.example.pdf.R;
+import com.example.pdf.model.DataBox;
 import com.example.pdf.model.Document;
 import com.example.pdf.model.User;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -28,8 +28,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,9 +38,11 @@ public class CreationFragment extends Fragment {
     private View view;
     private FloatingActionButton createButton;
     private User user;
+    //private DataBox dataBox;
 
     private DatabaseReference databaseReference;
     private List<Document> documents;
+    private List<DataBox> dataBoxes;
 
     @Nullable
     @Override
@@ -73,6 +73,7 @@ public class CreationFragment extends Fragment {
         recyclerView.setLayoutManager(new GridLayoutManager(context, 3));
 
         documents = new ArrayList<>();
+        dataBoxes = new ArrayList<>();
 
         databaseReference = FirebaseDatabase.getInstance().getReference(String.format("%s/create", user.getUserName()));
         databaseReference.addValueEventListener(new ValueEventListener() {
@@ -80,18 +81,23 @@ public class CreationFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot ds: snapshot.getChildren()){
                     Document doc = ds.getValue(com.example.pdf.model.Document.class);
+
+                    DataBox dataBox = new DataBox();
+                    dataBox.setUser(user);
+                    dataBox.setDocument(doc);
+                    dataBoxes.add(dataBox);
                     documents.add(doc);
                 }
 
                 OnPdfFileSelectListener onPdf = new OnPdfFileSelectListener() {
                     @Override
-                    public void onPdfSelected(Document document) {
+                    public void onPdfSelected(DataBox dataBox) {
                         startActivity(new Intent(context, ReadPdfActivity.class)
-                                .putExtra("docObj", document));
+                                .putExtra("dataBox", dataBox));
                     }
                 };
 
-                pdfAdapter = new PdfAdapter(context, documents, onPdf);
+                pdfAdapter = new PdfAdapter(context, dataBoxes, documents, onPdf);
                 recyclerView.setAdapter(pdfAdapter);
             }
 

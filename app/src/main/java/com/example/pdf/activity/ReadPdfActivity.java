@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.example.pdf.R;
+import com.example.pdf.model.DataBox;
 import com.example.pdf.model.Document;
 import com.github.barteksc.pdfviewer.PDFView;
 
@@ -18,6 +19,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class ReadPdfActivity extends AppCompatActivity {
+    private DataBox dataBox;
     private Document document;
     private String path = "";
 
@@ -29,7 +31,8 @@ public class ReadPdfActivity extends AppCompatActivity {
         setContentView(R.layout.pdf_reader);
         toolbar = findViewById(R.id.read_toolbar);
 
-        document = (Document) getIntent().getSerializableExtra("docObj");
+        dataBox = (DataBox) getIntent().getSerializableExtra("dataBox");
+        document = dataBox.getDocument();
         path = document.getDocumentUri();
 
         PDFView pdfView = findViewById(R.id.pdfView);

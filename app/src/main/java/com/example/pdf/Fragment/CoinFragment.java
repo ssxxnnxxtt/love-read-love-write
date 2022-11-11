@@ -73,57 +73,6 @@ public class CoinFragment extends Fragment {
 
     private DatabaseReference databaseReference;
 
-    /*private class TransactionAsyncTask extends AsyncTask<Void, Void, Void> {
-        private ProgressDialog progressDialog;
-
-        public TransactionAsyncTask() {
-            progressDialog = new ProgressDialog(context);
-        }
-
-        @Override
-        protected void onPreExecute() {
-            progressDialog.setTitle("Connect to blockchain");
-            progressDialog.setMessage("Please wait...");
-            progressDialog.show();
-        }
-
-        @Override
-        protected Void doInBackground(Void... args) {
-            a.getCoin().flowable().subscribeOn(Schedulers.io()).subscribe(new Consumer<BigInteger>() {
-                @Override
-                public void accept(BigInteger bigInteger) throws Exception{
-                    i = bigInteger;
-                }
-            });
-
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-            LocalDateTime now = LocalDateTime.now();
-            String formattedNow = now.format(formatter);
-            Timestamp timestamp = Timestamp.valueOf(formattedNow);
-
-            long t = timestamp.getTime();
-            BigInteger finalT = BigInteger.valueOf(t);
-            BigInteger finalCoin = BigInteger.valueOf(currCoin);
-
-            a.store(finalT, finalCoin).flowable().subscribeOn(Schedulers.io()).subscribe(new Consumer<TransactionReceipt>() {
-                @Override
-                public void accept(TransactionReceipt transactionReceipt) throws Exception {
-                    Log.i("1", "Success");
-                }
-            });
-
-
-            return null;
-        }
-        @Override
-        protected void onPostExecute(Void result) {
-            // do UI work here
-            if (progressDialog.isShowing()) {
-                progressDialog.dismiss();
-            }
-        }
-    }*/
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
