@@ -21,6 +21,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.appcompat.widget.Toolbar;
 
 public class DetailActivity extends AppCompatActivity {
@@ -36,13 +38,22 @@ public class DetailActivity extends AppCompatActivity {
     private Toolbar toolbar;
 
     private long currCoin;
+    private long sellerCoin;
 
     private DatabaseReference coinReference;
+    private DatabaseReference sellerReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+
+        ProgressDialog beginDialog = new ProgressDialog(this);
+
+        beginDialog.setTitle("Open this work");
+        beginDialog.setMessage("Please wait...");
+        beginDialog.show();
+
 
         dataBox = (DataBox) getIntent().getSerializableExtra("dataBox");
         document = dataBox.getDocument();
@@ -68,7 +79,21 @@ public class DetailActivity extends AppCompatActivity {
             }
         });
 
+        sellerReference = FirebaseDatabase.getInstance().getReference(String.format("%s/coin", document.getDocumentAuthor()));
+        sellerReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                sellerCoin = (Long) snapshot.getValue();
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+
         displayDetail();
+        beginDialog.dismiss();
 
         setSupportActionBar(toolbar);
 
@@ -124,7 +149,10 @@ public class DetailActivity extends AppCompatActivity {
         DatabaseReference collectionReference = FirebaseDatabase.getInstance().getReference(String.format("%s/collection", buyUser.getUserName()));
         collectionReference.child(collectionReference.push().getKey()).setValue(document);
 
+        sellerReference.setValue(sellerCoin+document.getDocumentPrice());
+
         progressDialog.dismiss();
+        finish();
 
     }
 }

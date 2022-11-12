@@ -39,9 +39,6 @@ public class CreationFragment extends Fragment {
     private View view;
     private FloatingActionButton createButton;
     private User user;
-    //private DataBox dataBox;
-
-    private int countPage;
 
     private DatabaseReference databaseReference;
     private List<Document> documents;
@@ -67,9 +64,6 @@ public class CreationFragment extends Fragment {
                 startActivity(intent);
             }
         });
-
-        countPage += 1;
-
         return view;
     }
 
@@ -77,9 +71,6 @@ public class CreationFragment extends Fragment {
         recyclerView = view.findViewById(R.id.create_recycle_view);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(context, 3));
-
-        //documents = new ArrayList<>();
-        //dataBoxes = new ArrayList<>();
 
         databaseReference = FirebaseDatabase.getInstance().getReference(String.format("%s/create", user.getUserName()));
         databaseReference.addValueEventListener(new ValueEventListener() {

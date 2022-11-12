@@ -57,9 +57,6 @@ public class HomepageFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(context, 3));
 
-        //documents = new ArrayList<>();
-        //dataBoxes = new ArrayList<>();
-
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override

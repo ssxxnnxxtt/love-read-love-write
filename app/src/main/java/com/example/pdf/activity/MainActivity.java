@@ -17,19 +17,26 @@ import com.example.pdf.Fragment.HomepageFragment;
 import com.example.pdf.R;
 import com.example.pdf.model.User;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.database.DatabaseReference;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawer;
     private User user;
+    private String userName;
+
+    private DatabaseReference contractReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        user = new User("user1");
+        userName = "user1";
+
+        user = new User(userName);
         user.setKey("7a27ac79f44d5a917207108668ac527e5b394c390047399dc61eae0888057cba");
         user.setContractAddress("0x4cb4490F8eaF6fB84f1a24589197c5E079657C6C");
+
         getIntent().putExtra("userObj", user);
 
         Toolbar toolbar = findViewById(R.id.toolbar);

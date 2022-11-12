@@ -5,37 +5,27 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.example.pdf.OnPdfFileSelectListener;
-import com.example.pdf.PdfAdapter;
 import com.example.pdf.R;
 import com.example.pdf.Transaction;
-import com.example.pdf.activity.ReadPdfActivity;
-import com.example.pdf.model.Document;
 import com.example.pdf.model.User;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.UploadTask;
 
-import org.web3j.abi.datatypes.Int;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
@@ -45,10 +35,9 @@ import org.web3j.tx.gas.DefaultGasProvider;
 
 import java.math.BigInteger;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
 
 //import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -70,6 +59,7 @@ public class CoinFragment extends Fragment {
     private long currCoin;
     private long neededCoin;
     private Transaction a;
+    private TextView dateTextView;
 
     private DatabaseReference databaseReference;
 
@@ -87,6 +77,7 @@ public class CoinFragment extends Fragment {
         ContractGasProvider contractGasProvider = new DefaultGasProvider();
         a = Transaction.load(user.getContractAddress(), web3, credentials, contractGasProvider);
         displayCoin();
+        displayTimeStamp();
         progressButton();
 
         return view;
@@ -106,6 +97,26 @@ public class CoinFragment extends Fragment {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
+            }
+        });
+    }
+
+    private void displayTimeStamp(){
+        ProgressDialog beginDialog = new ProgressDialog(context);
+        beginDialog.setTitle("Connect to blockchain");
+        beginDialog.setMessage("Please wait...");
+        beginDialog.show();
+
+        dateTextView = view.findViewById(R.id.update_date);
+
+        a.getDate().flowable().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<BigInteger>() {
+            @Override
+            public void accept(BigInteger bigInteger) throws Exception {
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+                String recentlyDate  = dateFormat.format(bigInteger);
+
+                dateTextView.setText(recentlyDate);
+                beginDialog.dismiss();
             }
         });
     }
@@ -199,21 +210,35 @@ public class CoinFragment extends Fragment {
 
         long t = timestamp.getTime();
         BigInteger finalT = BigInteger.valueOf(t);
-        BigInteger finalCoin = BigInteger.valueOf(currCoin);
-
-        Log.i("1", String.valueOf(finalT));
+        BigInteger finalCoin = BigInteger.valueOf(coin);
 
         ProgressDialog progressDialog = new ProgressDialog(context);
-
         progressDialog.setTitle("Connect to blockchain");
         progressDialog.setMessage("Please wait...");
         progressDialog.show();
 
-        a.store(finalT, finalCoin).flowable().subscribeOn(Schedulers.io()).subscribe(new Consumer<TransactionReceipt>() {
+        /*a.store(finalT, finalCoin).flowable().subscribeOn(Schedulers.io()).subscribe(new Consumer<TransactionReceipt>() {
             @Override
             public void accept(TransactionReceipt transactionReceipt) throws Exception {
                 Log.i("1", "Success");
                 databaseReference.setValue(totalCoin);
+
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+                String recentlyDate  = dateFormat.format(finalT);
+                dateTextView.setText(recentlyDate);
+                progressDialog.dismiss();
+            }
+        });*/
+
+        a.store(finalT, finalCoin).flowable().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<TransactionReceipt>() {
+            @Override
+            public void accept(TransactionReceipt transactionReceipt) throws Exception {
+                Log.i("1", "Success");
+                databaseReference.setValue(totalCoin);
+
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+                String recentlyDate  = dateFormat.format(finalT);
+                dateTextView.setText(recentlyDate);
                 progressDialog.dismiss();
             }
         });
